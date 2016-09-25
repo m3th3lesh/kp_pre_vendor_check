@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon scheme="3.0" edition_type="ROOT,ULT:VENDOR">
+    <id>kp_pre_vendor_check</id>
+    <version>1.0</version>
+    <default_language>en</default_language>
+    <priority>5200</priority>
+    <status>active</status>
+    <name>KartPay: Pre vendor customer check</name>
+    <supplier>KartPay.com</supplier>
+    <supplier_link>http://kartpay.com</supplier_link>
+    <author>
+        <name>KartPay.com</name>
+        <url>http://kartpay.com</url>
+        <email>support@kartpay.com</email>
+    </author>
+    <auto_install>MULTIVENDOR,ULTIMATE</auto_install>	
+    <settings>
+        <sections>
+            <section id="general">
+                <name>General</name>
+                <items>
+                    <item id="open_status">
+                        <name>Open status</name>
+                        <type>selectbox</type>
+                    </item>
+                    <item id="unconfirmed_status">
+                        <name>Unconfirmed status</name>
+                        <type>selectbox</type>
+                    </item>
+                    <item id="confirmed_status">
+                        <name>Confirmed status</name>
+                        <type>selectbox</type>
+                    </item>
+                </items>
+            </section>
+        </sections>
+    </settings>
+    <queries>
+        <item for="install">ALTER TABLE ?:users ADD COLUMN is_confirmed CHAR(1) DEFAULT 'N'  NOT NULL</item>
+        <item for="uninstall">ALTER TABLE ?:users DROP COLUMN is_confirmed</item>
+    </queries>
+</addon>
