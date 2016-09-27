@@ -37,7 +37,7 @@ function fn_kp_pre_vendor_check_change_order_status(&$status_to, $status_from, $
     $stOp = Registry::get('addons.kp_pre_vendor_check.open_status');
     $stCo = Registry::get('addons.kp_pre_vendor_check.confirmed_status');
     $stUnCo = Registry::get('addons.kp_pre_vendor_check.unconfirmed_status');
-    Tygh\Slx\Logger\Logger::getInstance()->log(sprintf("co=%s unco=%s", $stCo, $stUnCo));
+    //Tygh\Slx\Logger\Logger::getInstance()->log(sprintf("co=%s unco=%s", $stCo, $stUnCo));
     if( $status_to==$stCo || ($status_to==$stUnCo && $status_from==$stCo) ) {
         db_query(
                 "update ?:users set is_confirmed=?s where user_id=?i",
