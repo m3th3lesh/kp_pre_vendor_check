@@ -3,7 +3,7 @@
 use Tygh\Registry;
 /**
  *
- * @author Panos Kyriakakis <panos@salix.gr>
+ * @author Kartpay.com <support@kartpay.com>
  * @since Sep 25, 2016
  */
 function fn_settings_variants_addons_kp_pre_vendor_check_open_status() {
@@ -37,18 +37,25 @@ function fn_kp_pre_vendor_check_change_order_status(&$status_to, $status_from, $
     $stOp = Registry::get('addons.kp_pre_vendor_check.open_status');
     $stCo = Registry::get('addons.kp_pre_vendor_check.confirmed_status');
     $stUnCo = Registry::get('addons.kp_pre_vendor_check.unconfirmed_status');
-    //Tygh\Slx\Logger\Logger::getInstance()->log(sprintf("co=%s unco=%s", $stCo, $stUnCo));
     if( $status_to==$stCo || ($status_to==$stUnCo && $status_from==$stCo) ) {
         db_query(
-                "update ?:users set is_confirmed=?s where user_id=?i",
-                $status_to==$stCo ? 'Y' : 'N', 
-                $order_info['user_id']
-                );
+            "update ?:users set is_confirmed=?s where user_id=?i",
+            $status_to==$stCo ? 'Y' : 'N',
+            $order_info['user_id']
+        );
     }
-    if( $status_to==$stOp ) {
-        $isConfirmed = db_get_field("select is_confirmed from ?:users where user_id=?i", $order_info['user_id']);
-        if( $isConfirmed=='Y') {
-            $status_to = $stCo;
+}
+
+
+function fn_kp_pre_vendor_check_order_placement_routines($order_id, $force_notification, $order_info, $_error) {
+    $stOp = Registry::get('addons.kp_pre_vendor_check.open_status');
+    $stCo = Registry::get('addons.kp_pre_vendor_check.confirmed_status');
+    if( $_error==false ) {
+        if( $order_info['status']==$stOp ) {
+            $isConfirmed = db_get_field("select is_confirmed from ?:users where user_id=?i", $order_info['user_id']);
+            if( $isConfirmed=='Y') {
+                fn_change_order_status($order_id, $stCo);
+            }
         }
     }
 }
